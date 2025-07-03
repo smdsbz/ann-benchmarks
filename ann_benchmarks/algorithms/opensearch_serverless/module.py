@@ -128,7 +128,7 @@ class OpenSearchKNN(BaseANN):
             request_timeout=10,
         )
 
-        return [int(h["_id"][0]) - 1 for h in res["hits"]["hits"]]
+        return [int(h["_id"]) - 1 for h in res["hits"]["hits"]]
 
     def batch_query(self, X, n):
         self.batch_res = [self.query(q, n) for q in X]
