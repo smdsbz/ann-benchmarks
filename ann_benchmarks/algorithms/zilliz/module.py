@@ -24,8 +24,7 @@ class Zilliz(BaseANN):
             try:
                 self.connects.connect(
                     "default",
-                    host=os.environ.get('ZILLIZ_HOST', ''),
-                    port=os.environ.get('ZILLIZ_PORT', '19530'),
+                    uri=os.environ.get('ZILLIZ_URI', ''),
                     user=os.environ.get('ZILLIZ_USER', ''),
                     password=os.environ.get('ZILLIZ_PASSWORD', ''),
                 )
