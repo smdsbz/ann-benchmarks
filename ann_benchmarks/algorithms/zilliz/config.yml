@@ -1,0 +1,80 @@
+float:
+  any:
+    - base_args: ["@metric", "@dimension"]
+      constructor: ZillizFLAT
+      disabled: false
+      docker_tag: ann-benchmarks-zilliz
+      module: ann_benchmarks.algorithms.zilliz
+      name: zilliz-flat
+      run_groups:
+        FLAT:
+          args:
+            placeholder: [0]
+    - base_args: ["@metric", "@dimension"]
+      constructor: ZillizIVFFLAT
+      disabled: false
+      docker_tag: ann-benchmarks-zilliz
+      module: ann_benchmarks.algorithms.zilliz
+      name: zilliz-ivfflat
+      run_groups:
+        IVFFLAT:
+          args:
+            nlist: [128, 256, 512, 1024, 2048, 4096]
+          query_args: [[1, 10, 20, 50, 100]]
+    - base_args: ["@metric", "@dimension"]
+      constructor: ZillizIVFSQ8
+      disabled: false
+      docker_tag: ann-benchmarks-zilliz
+      module: ann_benchmarks.algorithms.zilliz
+      name: zilliz-ivfsq8
+      run_groups:
+        IVFSQ8:
+          args:
+            nlist: [128, 256, 512, 1024, 2048, 4096]
+          query_args: [[1, 10, 20, 50, 100]]
+    - base_args: ["@metric", "@dimension"]
+      constructor: ZillizIVFPQ
+      disabled: false
+      docker_tag: ann-benchmarks-zilliz
+      module: ann_benchmarks.algorithms.zilliz
+      name: zilliz-ivfpq
+      run_groups:
+        IVFPQ:
+          args:
+            nlist: [128, 256, 512, 1024, 2048, 4096]
+            m: [2, 4]
+          query_args: [[1, 10, 20, 50, 100]]
+    - base_args: ["@metric", "@dimension"]
+      constructor: ZillizHNSW
+      disabled: false
+      docker_tag: ann-benchmarks-zilliz
+      module: ann_benchmarks.algorithms.zilliz
+      name: zilliz-hnsw
+      run_groups:
+        HNSW:
+          args:
+            M: [4, 8, 12, 16, 24, 36, 48, 64, 96]
+            efConstruction: [200, 500]
+          query_args: [[10, 20, 40, 80, 120, 200, 400, 600, 800]]
+    - base_args: ["@metric", "@dimension"]
+      constructor: ZillizSCANN
+      disabled: false
+      docker_tag: ann-benchmarks-zilliz
+      module: ann_benchmarks.algorithms.zilliz
+      name: zilliz-scann
+      run_groups:
+        SCANN:
+          args:
+            nlist: [64, 128, 256, 512, 1024, 2048, 4096, 8192]
+          query_args: [[1, 10, 20, 30, 50]]
+    - base_args: ["@metric", "@dimension"]
+      constructor: ZillizAutoindex
+      disabled: false
+      docker_tag: ann-benchmarks-zilliz
+      module: ann_benchmarks.algorithms.zilliz
+      name: zilliz-autoindex
+      run_groups:
+        HNSW:
+          args:
+            placeholder: [0]
+          query_args: [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
