@@ -24,6 +24,8 @@ class OpenSearchKNN(BaseANN):
         )
         self.ef_search = None
         self._wait_for_health_status()
+        if self.client.indices.exists(index=self.index_name):
+            self.client.indices.delete(index=self.index_name)
 
     def _wait_for_health_status(self, wait_seconds=120, status="yellow"):
         for _ in range(wait_seconds):

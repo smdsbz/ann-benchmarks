@@ -30,6 +30,8 @@ class ElasticsearchKNN(BaseANN):
         )
         self.batch_res = []
         self._wait_for_health_status()
+        if self.client.indices.exists(index=self.index_name):
+            self.client.indices.delete(index=self.index_name)
 
     def _vector_similarity_metric(self, metric: str):
         # `dot_product` is more efficient than `cosine`, but requires all vectors to be normalized
