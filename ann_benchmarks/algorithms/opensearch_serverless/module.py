@@ -2,7 +2,7 @@ from time import sleep
 from urllib.request import Request, urlopen
 
 from opensearchpy import ConnectionError, OpenSearch
-from opensearchpy.helpers import bulk
+from opensearchpy.helpers import bulk, parallel_bulk
 from tqdm import tqdm
 
 from ..base.module import BaseANN
@@ -82,7 +82,11 @@ class OpenSearchKNN(BaseANN):
             for i, vec in enumerate(tqdm(X)):
                 yield {"_op_type": "index", "_index": self.index_name, "vec": vec.tolist(), "_id": str(i + 1)}
 
-        (_, errors) = bulk(self.client, gen(), chunk_size=100, max_retries=4, request_timeout=20000)
+        # (_, errors) = bulk(self.client, gen(), chunk_size=100, max_retries=4, request_timeout=20000)
+        errors = []
+        for (success, item) in parallel_bulk(self.client, gen(), thread_count=8, chunk_size=100, request_timeout=20000):
+            if not success:
+                errors.append(item)
         assert len(errors) == 0, errors
 
         i = 1
