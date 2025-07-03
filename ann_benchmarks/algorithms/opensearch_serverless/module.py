@@ -94,7 +94,7 @@ class OpenSearchKNN(BaseANN):
             try:
                 print(f"Force Merge iteration {i}...")
                 i = i + 1
-                self.client.indices.forcemerge(index=self.index_name, max_num_segments=5, request_timeout=20000)
+                self.client.indices.forcemerge(index=self.index_name, max_num_segments=1, request_timeout=20000)
                 # ensuring the force merge is completed
                 break
             except Exception as e:
