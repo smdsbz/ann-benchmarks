@@ -107,12 +107,12 @@ class OpenSearchKNN(BaseANN):
         self.ef_search = ef
         body = {"settings": {"index": {"knn.algo_param.ef_search": ef}}}
         self.client.indices.put_settings(body=body)
-        print("Running Warmup API after setting query arguments...")
-        res = urlopen(Request(
-            os.environ.get('OPENSEARCH_HOST', '') + "/_plugins/_knn/warmup/" + self.index_name + "?pretty"),
-            timeout=20000,
-        )
-        print(res.read().decode("utf-8"))
+        # print("Running Warmup API after setting query arguments...")
+        # res = urlopen(Request(
+        #     os.environ.get('OPENSEARCH_HOST', '') + "/_plugins/_knn/warmup/" + self.index_name + "?pretty"),
+        #     timeout=20000,
+        # )
+        # print(res.read().decode("utf-8"))
 
     def query(self, q, n):
         body = {"query": {"knn": {"vec": {"vector": q.tolist(), "k": n}}}}
