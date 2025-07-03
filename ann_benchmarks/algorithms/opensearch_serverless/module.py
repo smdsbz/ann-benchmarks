@@ -20,7 +20,7 @@ class OpenSearchKNN(BaseANN):
         self.index_name = f"os-{self.param_string}"
         self.client = OpenSearch(
             hosts=[os.environ.get('OPENSEARCH_HOST', '')],
-            basic_auth=(os.environ.get('OPENSEARCH_USER', ''), os.environ.get('OPENSEARCH_PASSWORD', '')),
+            http_auth=(os.environ.get('OPENSEARCH_USER', ''), os.environ.get('OPENSEARCH_PASSWORD', '')),
         )
         self.ef_search = None
         self._wait_for_health_status()
@@ -71,7 +71,7 @@ class OpenSearchKNN(BaseANN):
             }
         }
 
-        self.client.indices.create(self.index_name, body=body)
+        self.client.indices.create(index=self.index_name, body=body)
         self.client.indices.put_mapping(body=mapping, index=self.index_name)
 
         print("Uploading data to the Index:", self.index_name)
@@ -103,7 +103,7 @@ class OpenSearchKNN(BaseANN):
         self.client.indices.put_settings(body=body)
         print("Running Warmup API after setting query arguments...")
         res = urlopen(Request(
-            os.environ.get('OPENSERACH_HOST', '') + "/_plugins/_knn/warmup/" + self.index_name + "?pretty"),
+            os.environ.get('OPENSEARCH_HOST', '') + "/_plugins/_knn/warmup/" + self.index_name + "?pretty"),
             timeout=20000,
         )
         print(res.read().decode("utf-8"))
