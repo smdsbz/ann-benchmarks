@@ -93,10 +93,10 @@ class ElasticsearchKNN(BaseANN):
             raise RuntimeError("Failed to index documents")
 
         print(datetime.now(), "Force merge index ...")
-        self.client.indices.forcemerge(index=self.index_name, max_num_segments=1, request_timeout=999999999)
+        self.client.indices.forcemerge(index=self.index_name, max_num_segments=1, request_timeout=2592000)
 
         print(datetime.now(), "Refreshing index ...")
-        self.client.indices.refresh(index=self.index_name, request_timeout=999999999)
+        self.client.indices.refresh(index=self.index_name, request_timeout=2592000)
 
         print(datetime.now(), "Fit is done!")
 

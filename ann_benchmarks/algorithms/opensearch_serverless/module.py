@@ -95,14 +95,14 @@ class OpenSearchKNN(BaseANN):
             try:
                 print(datetime.now(), f"Force Merge iteration {i}...")
                 i = i + 1
-                self.client.indices.forcemerge(index=self.index_name, max_num_segments=1, request_timeout=9999999999)
+                self.client.indices.forcemerge(index=self.index_name, max_num_segments=1, request_timeout=2592000)
                 # ensuring the force merge is completed
                 break
             except Exception as e:
                 print(f"Running force again due to error.....")
                 traceback.print_exc()
         print(datetime.now(), "Refreshing the Index...")
-        self.client.indices.refresh(index=self.index_name, request_timeout=9999999999)
+        self.client.indices.refresh(index=self.index_name, request_timeout=2592000)
 
         print(datetime.now(), "Fit is done!")
 
