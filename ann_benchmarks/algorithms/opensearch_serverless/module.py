@@ -4,6 +4,7 @@ from urllib.request import Request, urlopen
 from opensearchpy import ConnectionError, OpenSearch
 from opensearchpy.helpers import bulk, parallel_bulk
 from tqdm import tqdm
+from datetime import datetime
 
 from ..base.module import BaseANN
 import traceback
@@ -76,7 +77,7 @@ class OpenSearchKNN(BaseANN):
         self.client.indices.create(index=self.index_name, body=body)
         self.client.indices.put_mapping(body=mapping, index=self.index_name)
 
-        print("Uploading data to the Index:", self.index_name)
+        print(datetime.now(), "Uploading data to the Index:", self.index_name)
 
         def gen():
             for i, vec in enumerate(tqdm(X)):
@@ -92,16 +93,18 @@ class OpenSearchKNN(BaseANN):
         i = 1
         while i <= 3:
             try:
-                print(f"Force Merge iteration {i}...")
+                print(datetime.now(), f"Force Merge iteration {i}...")
                 i = i + 1
-                self.client.indices.forcemerge(index=self.index_name, max_num_segments=1, request_timeout=20000)
+                self.client.indices.forcemerge(index=self.index_name, max_num_segments=1, request_timeout=9999999999)
                 # ensuring the force merge is completed
                 break
             except Exception as e:
                 print(f"Running force again due to error.....")
                 traceback.print_exc()
-        print("Refreshing the Index...")
-        self.client.indices.refresh(index=self.index_name, request_timeout=20000)
+        print(datetime.now(), "Refreshing the Index...")
+        self.client.indices.refresh(index=self.index_name, request_timeout=9999999999)
+
+        print(datetime.now(), "Fit is done!")
 
     def set_query_arguments(self, ef):
         self.ef_search = ef

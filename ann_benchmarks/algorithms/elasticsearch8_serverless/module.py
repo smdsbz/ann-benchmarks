@@ -2,6 +2,8 @@ from time import sleep
 
 from elasticsearch8 import ConnectionError, Elasticsearch
 from elasticsearch8.helpers import bulk
+from tqdm import tqdm
+from datetime import datetime
 
 from ..base.module import BaseANN
 
@@ -82,19 +84,21 @@ class ElasticsearchKNN(BaseANN):
         self.client.indices.create(index=self.index_name, settings=settings, mappings=mappings)
 
         def gen():
-            for i, vec in enumerate(X):
+            for i, vec in enumerate(tqdm(X)):
                 yield {"_op_type": "index", "_index": self.index_name, "id": str(i), "vec": vec.tolist()}
 
-        print("Indexing ...")
+        print(datetime.now(), "Indexing ...")
         (_, errors) = bulk(self.client, gen(), chunk_size=500, request_timeout=90)
         if len(errors) != 0:
             raise RuntimeError("Failed to index documents")
 
-        print("Force merge index ...")
-        self.client.indices.forcemerge(index=self.index_name, max_num_segments=1, request_timeout=900)
+        print(datetime.now(), "Force merge index ...")
+        self.client.indices.forcemerge(index=self.index_name, max_num_segments=1, request_timeout=999999999)
 
-        print("Refreshing index ...")
-        self.client.indices.refresh(index=self.index_name, request_timeout=900)
+        print(datetime.now(), "Refreshing index ...")
+        self.client.indices.refresh(index=self.index_name, request_timeout=999999999)
+
+        print(datetime.now(), "Fit is done!")
 
     def set_query_arguments(self, num_candidates):
         self.num_candidates = num_candidates
