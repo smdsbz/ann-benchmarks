@@ -25,8 +25,15 @@ class OpenSearchKNN(BaseANN):
         )
         self.ef_search = None
         self._wait_for_health_status()
-        if self.client.indices.exists(index=self.index_name):
-            self.client.indices.delete(index=self.index_name)
+        for _ in range(5):
+            try:
+                if self.client.indices.exists(index=self.index_name):
+                    self.client.indices.delete(index=self.index_name, timeout=120)
+                    print(datetime.now(), "Sleep 30 sec for index to be truly unregistered ...")
+                    sleep(30)
+                break
+            except Exception as e:
+                pass
 
     def _wait_for_health_status(self, wait_seconds=120, status="yellow"):
         for _ in range(wait_seconds):
