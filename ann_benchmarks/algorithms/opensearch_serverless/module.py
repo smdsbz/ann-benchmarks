@@ -81,8 +81,8 @@ class OpenSearchKNN(BaseANN):
             }
         }
 
-        self.client.indices.create(index=self.index_name, body=body)
-        self.client.indices.put_mapping(body=mapping, index=self.index_name)
+        self.client.indices.create(index=self.index_name, body=body, timeout=120)
+        self.client.indices.put_mapping(body=mapping, index=self.index_name, timeout=120)
 
         print(datetime.now(), "Uploading data to the Index:", self.index_name)
 
@@ -116,7 +116,7 @@ class OpenSearchKNN(BaseANN):
     def set_query_arguments(self, ef):
         self.ef_search = ef
         body = {"settings": {"index": {"knn.algo_param.ef_search": ef}}}
-        self.client.indices.put_settings(body=body)
+        self.client.indices.put_settings(body=body, timeout=120)
         # print("Running Warmup API after setting query arguments...")
         # res = urlopen(Request(
         #     os.environ.get('OPENSEARCH_HOST', '') + "/_plugins/_knn/warmup/" + self.index_name + "?pretty"),
